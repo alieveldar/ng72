@@ -1,0 +1,4 @@
+User-Agent: *
+Disallow:
+Sitemap: http://ng72com.tilda.ws/sitemap.xml
+Host: ng72com.tilda.ws
