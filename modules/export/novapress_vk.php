@@ -15,12 +15,17 @@ $rsstext='<?xml version="1.0" encoding="UTF-8" ?>
   <link>http://'.$GLOBAL["host"].'</link>
 </image>';
 
-
+//$modules = array("lenta","concurs");
+$notin = array("vtorzhilio","world","uncensored","realestatenews","gadgets");
+$data = DB("SELECT `link` FROM `_pages` WHERE (`module` = 'lenta') && `link` NOT IN ('".implode("','", $notin)."') LIMIT 50");
+for ($i=0; $i < $data["total"]; $i++) {
+    @mysql_data_seek($data["result"],$i);
+    $ar = @mysql_fetch_array($data["result"]);
+    $nptables[$ar["link"]] = $ar["link"]."_lenta";
+}
 
 $q="";
-foreach($tables as $table) {
-    $tmp=explode("_", $table);
-    $link=$tmp[0];
+foreach($nptables as $link => $table) {
     // Если нет столбца vk_np
     $vk_np_if = "AND 0 != ( SELECT ( SELECT vk_np FROM $table AS t WHERE t.id = $table.id ) FROM ( SELECT 0 AS vk_np ) AS dummy)";
     $q.="(SELECT `$table`.name, `$table`.pic, `$table`.id, `$table`.alias, `$table`.data, `$table`.lid, '$link' as `link` FROM `$table` WHERE (`$table`.`stat`='1' $vk_np_if) GROUP BY 1) UNION ";
