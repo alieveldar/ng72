@@ -14,11 +14,16 @@ if ($GLOBAL["sitekey"]==1 && $GLOBAL["database"]==1) {
 		$ar=explode(".", $P["ddata1"]); $sdata1=mktime($P["ddata2"], $P["ddata3"], $P["ddata4"], $ar[1], $ar[0], $ar[2]); 
 		$ar=explode(".", $P["ddata11"]); $sdata2=mktime($P["ddata21"], $P["ddata31"], $P["ddata41"], $ar[1], $ar[0], $ar[2]);
 		
+		$vk_np = DB("SHOW COLUMNS FROM {$alias}_lenta WHERE `Field` = 'vk_np'");
+		if(0 == $vk_np['total']) {
+			DB("ALTER TABLE {$alias}_lenta ADD vk_np TINYINT(1) NOT NULL DEFAULT 0");
+		}
+		
 		if($P["dtitle"]=="") { $P["dtitle"]=$P["dname"]; } $aliasid=translit(str_replace(".","-",$P["ddata1"])."-".str_replace("'", "\'", $P["dtitle"])); 
 		
-		$q="INSERT INTO `".$alias."_lenta` (`uid`, `bid`, `cat`, `name`,`title`,`alias`,`kw`, `ds`, `cens`, `realinfo`, `comments`, `data`, `astat`, `adata`, `promo`,`spromo`, `onind`, `spec`, `yarss`, `mailrss`, `tavto`, `tags`, `redak`,`gis`,`mailtizer`, `preview_mobile`)
+		$q="INSERT INTO `".$alias."_lenta` (`uid`, `bid`, `cat`, `name`,`title`,`alias`,`kw`, `ds`, `cens`, `realinfo`, `comments`, `data`, `astat`, `adata`, `promo`,`spromo`, `onind`, `spec`, `yarss`, `mailrss`, `tavto`, `tags`, `redak`,`gis`,`mailtizer`, `preview_mobile`, `vk_np`)
 		VALUES ('".(int)$P['authid']."', '".(int)$P['bid']."', '".(int)$P["site"]."', '".str_replace("'", "\'", $P["dname"])."', '".str_replace("'", "\'", $P["dtitle"])."', '".$aliasid."', '".str_replace("'", '&#039;', $P["dkw"])."', '".str_replace("'", '&#039;', $P["dds"])."', '".$P["cens"]."', '".str_replace("'", '&#039;', $P["realinfo"])."', '".$P["comms"]."', '".$sdata1."',
-		'".$P["autoon"]."', '".$sdata2."', '".$P["comrs"]."','".$P["scomrs"]."','".$P["ontv"]."', '".$P["spec"]."', '".$P["yarss"]."', '".$P["mailrss"]."', '".$P["tavto"]."', '".$dtags."', '".$P["redak"]."', '".$P["gis"]."', '".$P["mailtizer"]. "', '" . $P['preview_mobile'] . "')";
+		'".$P["autoon"]."', '".$sdata2."', '".$P["comrs"]."','".$P["scomrs"]."','".$P["ontv"]."', '".$P["spec"]."', '".$P["yarss"]."', '".$P["mailrss"]."', '".$P["tavto"]."', '".$dtags."', '".$P["redak"]."', '".$P["gis"]."', '".$P["mailtizer"]. "', '" . $P['preview_mobile'] . "', '".$P['vk_np']."')";
 		
 		$_SESSION["Msg"]="<div class='SuccessDiv'>Новая публикация успешно создана!</div>"; $data=DB($q); $last=DBL(); DB("UPDATE `".$alias."_lenta` SET `rate`='".$last."' WHERE  (id='".$last."')");
 		DB("INSERT INTO `_lentalog` (`link`, `id`, `uid`, `data`, `ip`, `text`) VALUES ('".$alias."', '".$last."', '".$_SESSION['userid']."', '".time()."', '".$_SERVER['REMOTE_ADDR']."', 'Создание #".$last.": ".str_replace("'", '&#039;', $P["dname"])."')");
@@ -68,6 +73,9 @@ if ($GLOBAL["sitekey"]==1 && $GLOBAL["database"]==1) {
 		<td width='1%'><input name='yarss' id='yarss' type='checkbox' value='1' checked></td><td width='20%'>Отправить в <b>Яндекс RSS</b></td>
 		<td width='1%'><input name='mailrss' id='mailrss' type='checkbox' value='1' checked></td><td width='20%'>Отправить в <b>Mail RSS</b></td>
 		<td width='1%'><input name='mailtizer' id='mailtizer' type='checkbox' value='1'></td><td width='20%'>Отправить в <b>Тизер Mail</b></td>
+	</tr>
+	<tr class='TRLine1'>
+	<td width='1%'><input name='vk_np' id='vk_np' type='checkbox' value='1' $chkVKnp></td><td width='20%'>Опубликовать в VK</td>
 	</tr>
 	</table></div>";
 	

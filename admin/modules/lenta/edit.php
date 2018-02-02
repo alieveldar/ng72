@@ -18,7 +18,12 @@ if ($GLOBAL["sitekey"]==1 && $GLOBAL["database"]==1) {
 
 		if (!isset($P['preview_mobile'])) {
             $P['preview_mobile'] = 0;
-        }
+		}
+		
+		$vk_np = DB("SHOW COLUMNS FROM {$alias}_lenta WHERE `Field` = 'vk_np'");
+		if(0 == $vk_np['total']) {
+			DB("ALTER TABLE {$alias}_lenta ADD vk_np TINYINT(1) NOT NULL DEFAULT 0");
+		}
 
 		$q="UPDATE `".$alias."_lenta` SET
 		`uid`='".(int)$P['authid']."',
@@ -48,7 +53,8 @@ if ($GLOBAL["sitekey"]==1 && $GLOBAL["database"]==1) {
 		`redak`='".$P["redak"]."',
 		`gis`='".$P["gis"]."',
 		`mailtizer`='".$P["mailtizer"]."',
-		`preview_mobile` = '" . $P['preview_mobile'] . "'
+		`preview_mobile` = '" . $P['preview_mobile'] . "',
+		`vk_np`='".$P['vk_np']."'
 		WHERE (id='".(int)$id."')";
 		DB("INSERT INTO `_lentalog` (`link`, `id`, `uid`, `data`, `ip`, `text`) VALUES ('".$alias."', '".$id."', '".$_SESSION['userid']."', '".time()."', '".$_SERVER['REMOTE_ADDR']."', 'Сохранение (name): ".str_replace("'", '&#039;', $P["dname"])."')");
 
@@ -66,7 +72,7 @@ if ($GLOBAL["sitekey"]==1 && $GLOBAL["database"]==1) {
 	if ($node["onind"]==1) { $chk3="checked"; }		if ($node["spec"]==1) { $chk4="checked"; }		if ($node["yarss"]==1) { $chk5="checked"; }
 	if ($node["mailrss"]==1) { $chk6="checked"; }	if ($node["tavto"]==1) { $chk7="checked"; }		if ($node["mailtizer"]==1) { $chk8="checked"; }
 	if ($node["redak"]==1) { $chk9="checked"; }		if ($node["gis"]==1) { $chk10="checked"; }		if ($node["spromo"]==1) { $chk11="checked"; }
-	if ($node['preview_mobile'] == 1){ $chkMobile = 'checked'; }
+	if ($node['preview_mobile'] == 1){ $chkMobile = 'checked'; }									if ($node["vk_np"]==1) { $chkVKnp="checked"; }
 
 	if ($node["comments"]==0) { $c1="selected"; } elseif ($node["comments"]==1) { $c2="selected"; } else { $c3="selected"; } $utags=explode(",", trim($node["tags"], ","));
 	$site=array(); $data=DB("SELECT `id`, `name` FROM `".$alias."_cats` ORDER BY `rate` DESC"); for ($i=0; $i<$data["total"]; $i++): @mysql_data_seek($data["result"],$i); $ar=@mysql_fetch_array($data["result"]); $site[$ar["id"]]=$ar["name"]; endfor;
@@ -106,7 +112,6 @@ if ($GLOBAL["sitekey"]==1 && $GLOBAL["database"]==1) {
 	'."</table></div>";
 
 	### Экспорт материала
-	### Экспорт материала
 	$AdminText.="<h2>Отображение и экспорт материала</h2><div class='RoundText TagsList'><table>
 	<tr class='TRLine0'>
 		<td width='1%'><input name='ontv' id='ontv' type='checkbox' value='1' $chk3></td><td width='20%'>Главная новость</td>
@@ -114,20 +119,21 @@ if ($GLOBAL["sitekey"]==1 && $GLOBAL["database"]==1) {
 		<td width='1%'><input name='tavto' id='tavto' type='checkbox' value='1' $chk7></td><td width='20%'>Выводить Фото в лентах</td>
 	</tr>
 	<tr class='TRLine1'>
-		<!--<td width='1%'><input name='gis' id='gis' type='checkbox' value='1' $chk10></td><td width='20%'><b>«Телевизор»</b> Семья</td>-->
-		<!--<td width='1%'><input name='spec' id='spec' type='checkbox' value='1' $chk4></td><td width='20%'>Спец. размещение</td>-->
-		<!--<td width='1%'></td><td width='1%'></td>-->
-	</tr>
-	<tr class='TRLine0'>
 		<td width='1%'><input name='comrs' id='comrs' type='checkbox' value='1' $chk2></td><td width='20%'>Коммерческая новость</td>
 		<td width='1%'><input name='scomrs' id='scomrs' type='checkbox' value='1' $chk11></td><td width='20%'>VIP Коммерческая новость</td>
 		<td width='1%'><input name='preview_mobile' id='mobile' type='checkbox' value='1' $chkMobile></td><td width='20%'>Отображается в мобильной версии</td>
 		<td width='1%'></td><td width='1%'></td>
 	</tr>
-	<tr class='TRLine1'>
+	<tr class='TRLine0'>
 		<td width='1%'><input name='yarss' id='yarss' type='checkbox' value='1' $chk5></td><td width='20%'>Отправить в <b>Яндекс RSS</b></td>
 		<td width='1%'><input name='mailrss' id='mailrss' type='checkbox' value='1' $chk6></td><td width='20%'>Отправить в <b>Mail RSS</b></td>
 		<td width='1%'><input name='mailtizer' id='mailtizer' type='checkbox' value='1' $chk8></td><td width='20%'>Отправить в <b>Тизер Mail</b></td>
+	</tr>
+	<tr class='TRLine1'>
+		<td width='1%'><input name='vk_np' id='vk_np' type='checkbox' value='1' $chkVKnp></td><td width='20%'>Опубликовать в VK</td>
+		<!--<td width='1%'><input name='gis' id='gis' type='checkbox' value='1' $chk10></td><td width='20%'><b>«Телевизор»</b> Семья</td>-->
+		<!--<td width='1%'><input name='spec' id='spec' type='checkbox' value='1' $chk4></td><td width='20%'>Спец. размещение</td>-->
+		<!--<td width='1%'></td><td width='1%'></td>-->
 	</tr>
 	</table></div>";
 
