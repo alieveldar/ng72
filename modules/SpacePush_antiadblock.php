@@ -11,8 +11,8 @@ if (file_exists($cache) && strtotime("-10 minutes") < filemtime($cache)) {
    $ch = curl_init();              # Создаем новое соединение
    curl_setopt_array($ch, [        # Массово устанавливаем параметры соединения
        CURLOPT_URL                 => 'http://adblockrecovery.ru/api/code', #
-       CURLOPT_TIMEOUT_MS          => 100, # Таймаут 100ms
-       CURLOPT_CONNECTTIMEOUT_MS   => 100, # Таймаут соединения 100ms
+       CURLOPT_TIMEOUT_MS          => 300, # Таймаут 100ms
+       CURLOPT_CONNECTTIMEOUT_MS   => 300, # Таймаут соединения 100ms
        CURLOPT_RETURNTRANSFER      => true,# Получить результат
        CURLOPT_NOSIGNAL            => true,
        CURLOPT_HTTPHEADER          => [    # Устанавливаем Header с вашим ключом доступа
