@@ -38,17 +38,17 @@ $PHPmodules = array(
 );
 $JSmodules = array(	
 	"Библиотека JQuery"					=> "/modules/standart/js/JQuery.js",
-		"Библиотека JQueryUI"					=> "/modules/standart/js/JQuery.UI.js",
+	"Библиотека JQueryUI"				=> "/modules/standart/js/JQuery.UI.js",
 	"Библиотека JQuery Cookies"			=> "/modules/standart/js/JQuery.COOKIE.js",
 	"Передача данных JsHttpRequest"		=> "/modules/standart/js/JsHttpRequest.js",	
 	"Основной JS сайта"  				=> "/modules/standart/js/MainModule.js",
 	"Авторизация ULogin"				=> "http://ulogin.ru/js/ulogin.js",
-"API Vkontakte Groups"			=> "http://userapi.com/js/api/openapi.js",
+	"API Vkontakte Groups"				=> "http://userapi.com/js/api/openapi.js",
 );
 $CSSmodules = array(
-	"Стандартный Pro.CMS"	=> "/template/standart/prostandart.css",
-	"Библиотека JQueryUICSS "					=> "/modules/standart/js/ui-theme/JQuery.UI.css",
-	"awesome css"=>"/template/awesome/css/font-awesome.min.css",
+	"Стандартный Pro.CMS"				=> "/template/standart/prostandart.css",
+	"Библиотека JQueryUICSS "			=> "/modules/standart/js/ui-theme/JQuery.UI.css",
+	"awesome css"						=> "/template/awesome/css/font-awesome.min.css",
 );
 
 // Подключение БД ==========================================================================================================================================
@@ -257,6 +257,7 @@ $RENDER.=$GLOBAL["CSSModules"];
 $RENDER.=$GLOBAL["JSModules"];
 //$RENDER.='<script type="text/javascript" src="//moe.video/js/replacer.js"></script><script>MoeVideo.Replacer({pin: 36560261});</script>'.$r;
 $RENDER.='<script charset="UTF-8" src="//cdn.sendpulse.com/js/push/3ce30b9fd1936169a2c80c70286a86fe_0.js" async></script>';
+$RENDER.= include 'modules/SpacePush_antiadblock.php'; 
 $RENDER.='</head>'.$r.'<body>'.$r;
 $RENDER.=$DesignHtml.$r;
 $RENDER.='<input type="hidden" id="BoxCount" value="0" /><input type="hidden" id="gidvk" value="0" /><input type="hidden" id="DomainId" value="'.(int)$SubDomain.'" /><input type="hidden" id="UserId" value="'.(int)$_SESSION["userid"].'" />';
