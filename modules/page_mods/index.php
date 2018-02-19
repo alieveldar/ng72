@@ -142,6 +142,7 @@ $text.='<!-- Orion inizialize start -->
 <!-- Orion inizialize end -->
 
 	<div id="adfox_1479814870"></div>
+	<div id="adfox_15187716605382891"></div>
 <script type="text/javascript">
 adv.banner(function(webmd) {
 		console.log("Showing banner 1", webmd);
@@ -205,7 +206,7 @@ adv.banner(function(webmd) {
   (adsbygoogle = window.adsbygoogle || []).push({
     google_ad_client: "ca-pub-4113020084267890",
     enable_page_level_ads: true
-  }); 
+  });
 </script>'.$C20;
 */
 

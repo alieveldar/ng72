@@ -49,6 +49,22 @@ function KazanNews() { $C="";
             puid16: ""
         }
     });
+</script>
+<!--MaxLab START-->
+<!--Лаборатория "MaxLab"-->
+<!--Сайт: НГС 72 Тюмень-->
+<!--Категория: Тюменская область-->
+<!--Тип баннера: 240x400-->
+<div id="adfox_15187716605382891"></div>
+<script>
+window.Ya.adfoxCode.create({
+ownerId: 233,
+containerId: \'adfox_15187716605382891\',
+params: {
+p1: \'bznhf\',
+p2: \'vd\'
+}
+});
 </script>';
 		}
 

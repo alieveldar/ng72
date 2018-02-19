@@ -1,4 +1,4 @@
-<?	
+<?
 $file="_rightblock-rightdefault"; if (RetCache($file, "cacheblock")=="true") { list($Page["RightContent"], $cap)=GetCache($file, 0); } else { list($Page["RightContent"], $cap)=CreateRightBlock(); SetCache($file, $Page["RightContent"], "", "cacheblock"); }
 
 
@@ -6,7 +6,7 @@ $file="_rightblock-rightdefault"; if (RetCache($file, "cacheblock")=="true") { l
 function CreateRightBlock() {
 	global $Domains, $SubDomain, $GLOBAL, $C20, $C25, $C, $C10, $C15; $ban10=2; $text=''; $src="";
 	
-	//$text.="<div id='ngbg'></div>";	
+	//$text.="<div id='ngbg'></div>";
 	$text.="<div class='banner' id='Banner-1-1'></div>";
 	
 //	$text.="<h2>Календарь публикаций</h2><style>.hasDatepicker { font-size:10px; line-height:14px; width:240px; }</style>"; $defdata="";
@@ -29,6 +29,7 @@ function CreateRightBlock() {
 <!-- Orion inizialize end -->
 	
 	<div id="adfox_1479814870"></div>
+	<div id="adfox_15187716605382891"></div>
 <script type="text/javascript">
 adv.banner(function(webmd) {
 		console.log("Showing banner 1", webmd);
@@ -51,7 +52,7 @@ adv.banner(function(webmd) {
         },
         onRender: function() {  },
            onError: function(error) { console.log(error); },
-           onStub: function() { 
+           onStub: function() {
 		   
 				//Ваш код JS для возврата показа
 				
@@ -73,7 +74,7 @@ adv.banner(function(webmd) {
 	/*concurs*/
 	$data=DB("SELECT *, 'concurs' as `link` FROM `concurs_lenta` WHERE (`stat`=1 && `votingend`>'".time()."') ORDER BY `data` DESC"); if ($data["total"]>0) { $text.="<h3><a href='/concurs'>НАШИ конкурсы</a></h3>";  }
 	for ($i=0; $i<$data["total"]; $i++) { @mysql_data_seek($data["result"], $i); $ar=@mysql_fetch_array($data["result"]); $text.="<div class='OCNew ReThreeOrder'>"; $text.="<a href='/".$ar["link"]."/view/".$ar["id"]."'>";
-		$text.="<img src='/userfiles/picintv/".$ar["pic"]."' style='margin:0 0 5px 0; padding:0; float:none; width:100%; height:auto;' />";  $text.=$ar["name"].specIconOnTags($ar)."</a>"; $text.="</div>".$C10; 
+		$text.="<img src='/userfiles/picintv/".$ar["pic"]."' style='margin:0 0 5px 0; padding:0; float:none; width:100%; height:auto;' />";  $text.=$ar["name"].specIconOnTags($ar)."</a>"; $text.="</div>".$C10;
 	}
 
 	/*PodSurikat 1 */
@@ -86,7 +87,7 @@ adv.banner(function(webmd) {
 	/*PodSurikat 2 */
 	$q="SELECT `[table]`.`id`,`[table]`.`tags`, `[table]`.`name`,`[table]`.`data`, '1' as `tavto`, `[table]`.`lid`, `[table]`.`pic`, '[link]' as `link` FROM `[table]` WHERE (`[table]`.`stat`='1' && `[table]`.`data`>'".(time()-6*24*60*60)."' && (`[table]`.`promo`=1 || `[table]`.`spromo`=1) [used])";
 	$endq="ORDER BY `data` DESC LIMIT 6,6"; $data=getNewsFromLentas($q, $endq); $list=array(); $cnt=1; if ((int)$data["total"]>0) { for ($i=0; $i<$data["total"]; $i++) { @mysql_data_seek($data["result"], $i); $ar=@mysql_fetch_array($data["result"]); $list[]=$ar; }
-	foreach($list as $ar) { if ($ar["link"]!="ls") { if (strpos($ar["link"], "ls")!==false || strpos($ar["link"], "bubr")!==false) { $rel="target='_blank' rel='nofollow'"; } else { $rel=""; } $text.="<div class='OCNew ReTwoOrder'>"; $text.="<a href='/".$ar["link"]."/view/".$ar["id"]."' $rel>"; if ($ar["tavto"]==1 && $ar["pic"]!="") { $text.="<img src='$src/userfiles/pictavto/".$ar["pic"]."'>"; } $text.=$ar["name"].specIconOnTags($ar)."</a>"; $text.="</div>".$C25; $cnt++; }}} else { $text.="<!--yandex2-->"; }	
+	foreach($list as $ar) { if ($ar["link"]!="ls") { if (strpos($ar["link"], "ls")!==false || strpos($ar["link"], "bubr")!==false) { $rel="target='_blank' rel='nofollow'"; } else { $rel=""; } $text.="<div class='OCNew ReTwoOrder'>"; $text.="<a href='/".$ar["link"]."/view/".$ar["id"]."' $rel>"; if ($ar["tavto"]==1 && $ar["pic"]!="") { $text.="<img src='$src/userfiles/pictavto/".$ar["pic"]."'>"; } $text.=$ar["name"].specIconOnTags($ar)."</a>"; $text.="</div>".$C25; $cnt++; }}} else { $text.="<!--yandex2-->"; }
 /*	$text.='<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
 <script>
   (adsbygoogle = window.adsbygoogle || []).push({
@@ -125,7 +126,7 @@ $text.='<div id="smi_teaser_11345">
 	// --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
 	return(array($text, ""));
 	
-	//код сми 2	
+	//код сми 2
 
 }
 
