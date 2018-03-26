@@ -28,17 +28,17 @@ for ( $it = 0; $it < $datat["total"]; $it ++ ) {
         <item>
             <title>' . htmlspecialchars( $at["name"] ) . '</title>
             <link>http://' . $GLOBAL["host"] . '/' . $at["link"] . '/view/' . $at["id"] . '</link>
-            <pdalink>http://m.' . $GLOBAL["host"] . '/' . $at["link"] . '/view/' . $at["id"] . '</link>
+            <pdalink>http://m.' . $GLOBAL["host"] . '/' . $at["link"] . '/view/' . $at["id"] . '</pdalink>
             <pubDate>' . date( "r", $at["data"] ) . '</pubDate>
-            <author>' . '' . '</author>
+            <author>ng72.ru</author>
             <content:encoded>
-                ' . htmlspecialchars( $at["text"] ) . '
+                ' . htmlspecialchars( str_replace(['<div ', '</div>'], ['<p ', '</p>'], $at["text"]) ) . '
             </content:encoded>';
             if ( $at["pic"] != "" ) {
                 $rsstext .= '
             <enclosure url="http://' . $GLOBAL["host"] . '/userfiles/picpreview/' . $at["pic"] . '" length="' .
-                            absint(filesize($_SERVER['DOCUMENT_ROOT'] . '/userfiles/picpreview/' . $at["pic"] )) .
-                            'type="image/jpeg" />';
+                            abs( intval( filesize($_SERVER['DOCUMENT_ROOT'] . '/userfiles/picpreview/' . $at["pic"] ) ) ) .
+                            '" type="image/jpeg" />';
             }
             $rsstext .= '
         </item>';
