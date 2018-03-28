@@ -1,9 +1,9 @@
 <?
 # ПРАВЫЙ БЛОК # Переменная $Page["RightContent"] может быть определена в запрашиваемых файлах
 # Если определен файл в папке /modules/page_mods/right_block/[поддомен].php берем его, иначе берем дефолтный правый блок /modules/page_mods/right_block/default.php
- 
-if ($link=="") { 
-	
+
+if ($link=="") {
+
 } else {
 	if (is_file("modules/page_mods/right_block/new-".$Domains[$SubDomain].".php")) {
 		@require("modules/page_mods/right_block/new-".$Domains[$SubDomain].".php");
@@ -17,7 +17,7 @@ if ($link=="") {
 # ЛЕВЫЙ БЛОК - СТАРТ # $Page["LeftContent"] может быть определена в запрашиваемых файлах
 # Если определен файл в папке /modules/page_mods/left_block/[поддомен].php берем его, иначе берем дефолтный левый блок /modules/page_mods/left_block/default.php
 if ($link=="") {
- 
+
 } else {
 	if (is_file("modules/page_mods/left_block/new-".$Domains[$SubDomain].".php")) {
 		@require("modules/page_mods/left_block/new-".$Domains[$SubDomain].".php");
@@ -29,9 +29,9 @@ if ($link=="") {
 }
 
 # ВЕРХНИЙ БЛОК # Переменная $Page["TopContent"] может быть определена в запрашиваемых файлах
-# Если определен файл в папке /modules/page_mods/top_block/[поддомен].php берем его, иначе берем дефолтный правый блок /modules/page_mods/top_block/default.php 
+# Если определен файл в папке /modules/page_mods/top_block/[поддомен].php берем его, иначе берем дефолтный правый блок /modules/page_mods/top_block/default.php
 if ($link=="ls" || $Domains[$SubDomain]=="7kazan") {
- 
+
 } else {
 	if (is_file("modules/page_mods/top_block/new-".$Domains[$SubDomain].".php")) {
 		@require("modules/page_mods/top_block/new-".$Domains[$SubDomain].".php");
@@ -44,9 +44,9 @@ if ($link=="ls" || $Domains[$SubDomain]=="7kazan") {
 
 
 # НИЖНИЙ БЛОК # Переменная $Page["BottomContent"] может быть определена в запрашиваемых файлах
-# Если определен файл в папке /modules/page_mods/bottom_block/[поддомен].php берем его, иначе берем дефолтный правый блок /modules/page_mods/bottom_block/default.php 
+# Если определен файл в папке /modules/page_mods/bottom_block/[поддомен].php берем его, иначе берем дефолтный правый блок /modules/page_mods/bottom_block/default.php
 if ($link=="") {
-	 
+
 } else {
 	if (is_file("modules/page_mods/bottom_block/new-".$Domains[$SubDomain].".php")) {
 		@require("modules/page_mods/bottom_block/new-".$Domains[$SubDomain].".php");
@@ -81,78 +81,78 @@ function getLentasOnModules() { global $lentas; if (sizeof($lentas)==0) { $modul
 $q="SELECT `link` FROM `_pages` WHERE (`module` IN ('".implode("','", $modules)."') && `link` NOT IN ('".implode("','", $notin)."')) LIMIT 50"; $data=DB($q);
 for ($i=0; $i<$data["total"]; $i++) { @mysql_data_seek($data["result"],$i); $ar=@mysql_fetch_array($data["result"]); $lentas[$ar["link"]]=$ar["link"]."_lenta"; }}return $lentas; }
 
-function getNewsFromLentas($q='',$endq='') { global $used; $lentas=getLentasOnModules(); foreach ($lentas as $l=>$t) { $usedtext=""; if (sizeof($used[$l])>0) { $usedtext=" && `".$t."`.`id` NOT IN (0, ".implode(",", $used[$l]).")"; } // не включаем в выборку ранее взятые новости  
+function getNewsFromLentas($q='',$endq='') { global $used; $lentas=getLentasOnModules(); foreach ($lentas as $l=>$t) { $usedtext=""; if (sizeof($used[$l])>0) { $usedtext=" && `".$t."`.`id` NOT IN (0, ".implode(",", $used[$l]).")"; } // не включаем в выборку ранее взятые новости
 		 $qitem="(".str_replace(array("[table]","[link]"),array($t, $l),$q).") UNION "; $qitem=str_replace("[used]", $usedtext, $qitem); $query.=$qitem; } $query=trim($query, "UNION ").' '.$endq; $data=DB($query); return $data; } // заменяем таблицу и ссылку на нужное и формируем запрос
 
-function LSgetNewsFromLentas($q='',$endq='') { global $used; $LSlentas=LSgetLentasOnModules(); foreach ($LSlentas as $l=>$t) { $usedtext=""; if (sizeof($used[$l])>0) { $usedtext=" && `".$t."`.`id` NOT IN (0, ".implode(",", $used[$l]).")"; } // не включаем в выборку ранее взятые новости  
+function LSgetNewsFromLentas($q='',$endq='') { global $used; $LSlentas=LSgetLentasOnModules(); foreach ($LSlentas as $l=>$t) { $usedtext=""; if (sizeof($used[$l])>0) { $usedtext=" && `".$t."`.`id` NOT IN (0, ".implode(",", $used[$l]).")"; } // не включаем в выборку ранее взятые новости
 		 $qitem="(".str_replace(array("[table]","[link]"),array($t, $l),$q).") UNION "; $qitem=str_replace("[used]", $usedtext, $qitem); $query.=$qitem; } $query=trim($query, "UNION ").' '.$endq; $data=DB($query); return $data; } // заменяем таблицу и ссылку на нужное и формируем запрос
 
 function LSgetLentasOnModules() { global $LSlentas; if (sizeof($LSlentas)==0) { $modules=array("lenta", "concurs", "tatbrand"); $isin=array("ls"); $notin=array("vtorzhilio");
 	$q="SELECT `link` FROM `_pages` WHERE (`module` IN ('".implode("','", $modules)."') && `link` NOT IN ('".implode("','", $notin)."')  && `link` IN ('".implode("','", $isin)."')) LIMIT 50"; $data=DB($q);
-		 for ($i=0; $i<$data["total"]; $i++) { @mysql_data_seek($data["result"],$i); $ar=@mysql_fetch_array($data["result"]); $LSlentas[$ar["link"]]=$ar["link"]."_lenta"; }} return $LSlentas; 
+		 for ($i=0; $i<$data["total"]; $i++) { @mysql_data_seek($data["result"],$i); $ar=@mysql_fetch_array($data["result"]); $LSlentas[$ar["link"]]=$ar["link"]."_lenta"; }} return $LSlentas;
 }
-		 
+
 function getMaxComments($limit=7) {
 	global $C, $C20; $lentas=getLentasOnModules(); $dataold=time()-7*24*60*60; $q="SELECT `[table]`.`id`, `[table]`.`name`, `[table]`.`data`, `[table]`.`comcount`, '[link]' as `link` FROM `[table]` WHERE (`[table]`.`stat`='1' && `[table]`.`data`>'".$dataold."')";
 	$endq="ORDER BY `comcount` DESC LIMIT ".$limit; $tv=getNewsFromLentas($q, $endq); if ((int)$tv["total"]>0) { for ($i=0; $i<$tv["total"]; $i++): @mysql_data_seek($tv["result"], $i); $ar=@mysql_fetch_array($tv["result"]);
 	if (strpos($ar["link"], "ls")!==false || strpos($ar["link"], "bubr")!==false) { $rel="target='_blank' rel='nofollow'"; } else { $rel=""; }
-	$text.="<div class='ONew'><a href='/".$ar["link"]."/view/".$ar["id"]."' $rel>".$ar["name"]."</a>".$C.Dater($ar)."</div>".$C20; endfor; } return $text;	
+	$text.="<div class='ONew'><a href='/".$ar["link"]."/view/".$ar["id"]."' $rel>".$ar["name"]."</a>".$C.Dater($ar)."</div>".$C20; endfor; } return $text;
 }
 
 function getMaxSeens($limit=7) {
 	global $C, $C20; $lentas=getLentasOnModules(); $dataold=time()-7*24*60*60; $q="SELECT `[table]`.`id`,`[table]`.`seens`, `[table]`.`name`, `[table]`.`data`, `[table]`.`comcount`, '[link]' as `link` FROM `[table]` WHERE (`[table]`.`stat`='1' && `[table]`.`data`>'".$dataold."')";
 	$endq="ORDER BY `seens` DESC LIMIT ".$limit; $tv=getNewsFromLentas($q, $endq); if ((int)$tv["total"]>0) { for ($i=0; $i<$tv["total"]; $i++): @mysql_data_seek($tv["result"], $i); $ar=@mysql_fetch_array($tv["result"]);
 	if (strpos($ar["link"], "ls")!==false || strpos($ar["link"], "bubr")!==false) { $rel="target='_blank' rel='nofollow'"; } else { $rel=""; }
-	$text.="<div class='ONew'><a href='/".$ar["link"]."/view/".$ar["id"]."' $rel>".$ar["name"]."</a>".$C.Dater($ar,"","seens")."</div>".$C20; endfor; } return $text;	
+	$text.="<div class='ONew'><a href='/".$ar["link"]."/view/".$ar["id"]."' $rel>".$ar["name"]."</a>".$C.Dater($ar,"","seens")."</div>".$C20; endfor; } return $text;
 }
 
 function getMaxLikes($limit=7) {
 	global $C, $C20; $lentas=getLentasOnModules(); $dataold=time()-7*24*60*60; $q="SELECT `[table]`.`id`, `[table]`.`likes`, `[table]`.`name`, `[table]`.`data`, `[table]`.`comcount`, '[link]' as `link` FROM `[table]` WHERE (`[table]`.`stat`='1' && `[table]`.`data`>'".$dataold."')";
 	$endq="ORDER BY `likes` DESC LIMIT ".$limit; $tv=getNewsFromLentas($q, $endq); if ((int)$tv["total"]>0) { for ($i=0; $i<$tv["total"]; $i++): @mysql_data_seek($tv["result"], $i); $ar=@mysql_fetch_array($tv["result"]);
 	if (strpos($ar["link"], "ls")!==false || strpos($ar["link"], "bubr")!==false) { $rel="target='_blank' rel='nofollow'"; } else { $rel=""; }
-	$text.="<div class='ONew'><a href='/".$ar["link"]."/view/".$ar["id"]."' $rel>".$ar["name"]."</a>".$C.Dater($ar,"","likes")."</div>".$C20; endfor; } return $text;	
-}		 
-		 
+	$text.="<div class='ONew'><a href='/".$ar["link"]."/view/".$ar["id"]."' $rel>".$ar["name"]."</a>".$C.Dater($ar,"","likes")."</div>".$C20; endfor; } return $text;
+}
+
 		 function specIconOnTags($ar) {
 	$tags=explode(",", trim($ar["tags"],",")); $text="";
 	if (in_array(93, $tags)) { $text.="<i class='fa fa-picture-o' title='фото'></i>"; }
-	if (in_array(72, $tags)) { $text.="<i class='fa fa-youtube-play' title='видео'></i>"; } 
+	if (in_array(72, $tags)) { $text.="<i class='fa fa-youtube-play' title='видео'></i>"; }
 	if (in_array(19, $tags)) { $text.="<i class='fa fa-volume-up' title='мультимедиа'></i>"; }
 	return $text;
 }
-		 
-		 
-		 
-		 
-		 
-		 
-		 
-		 
-		 
-		 
-		 
-		 
-		 
-		 
-		 
-		 
-		 
-		 
-		 
-		 
-		 
-		 
-		 
-		 
-		 
-		 
-		 
-		 
-		 
-		 
-		 
-		 
-function razdelAfishaKazan() { 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function razdelAfishaKazan() {
 	$data=DB("SELECT `id`,`name`,`pic`,`lid`,`data`,`comcount`,'afisha' as `link` FROM `afisha_lenta` WHERE (`stat`='1') ORDER BY `data` DESC LIMIT 4");
 	if ($data["total"]>0) { $text="<h2><a href='/afisha'>Афиша Казани</a></h2><div class='RedBlock'>";
 	for ($i=0; $i<$data["total"]; $i++): @mysql_data_seek($data["result"], $i); $ar=@mysql_fetch_array($data["result"]); $d=ToRusData($ar["data"]);
@@ -160,10 +160,10 @@ function razdelAfishaKazan() {
 	} else { $text.="<div class='OtherNewsItem'><a href='/$ar[link]/view/$ar[id]'><img src='/userfiles/pictavto/$ar[pic]' /><div class='Cap'>$ar[name]</h3></div></a><div class='Data'>".ToLocalDay($d[4])."</div></div>"; }
 	endfor; $text.="<a href='/".$ar["link"]."' class='ReadMoreLink'>Читать больше »</a>"; $text.="</div>"; return $text; }
 }
-		 
+
 function DrawNewsItem($ar, $datas='', $class='') {
 	$pic=""; $text=""; if ($datas=='') { $data=ToRusData($ar["data"]); } else { $data=ToRusData($datas); } $pic="<img src='/userfiles/picsquare/".$ar["pic"]."' title='".$ar["name"]."' alt='".$ar["name"]."' />";
-	$text.="<div class='itemlist ".$class."'><data>".ToLocalDay($data[4])."</data> / <a href='/".$ar["link"]."/view/".$ar["id"]."'>"; if ($ar["pic"]!="") { $text.=$pic; } 
+	$text.="<div class='itemlist ".$class."'><data>".ToLocalDay($data[4])."</data> / <a href='/".$ar["link"]."/view/".$ar["id"]."'>"; if ($ar["pic"]!="") { $text.=$pic; }
 	$text.=$ar["name"]."</a>"; if ((int)$ar["comcount"]!=0) { $text.=" <span class='ComCnt' title='Комментарии'>".$ar["comcount"]."</span>"; } $text.="</div>"; return $text;
 }
 
@@ -180,34 +180,47 @@ function DrawNewsComrs($ar, $datas='', $class='') {
 
 
 function TheNewestInKazan($limit=5) {
-	$lentas=getLentasOnModules(); global $GLOBAL;
-	$q="SELECT `[table]`.`id`, `[table]`.`name`, `[table]`.`data`, `[table]`.`comcount`, `[table]`.`pic`, '[link]' as `link` FROM `[table]` WHERE (`[table]`.`stat`='1' && `[table]`.`onind`=1)";
-	$endq="ORDER BY `data` DESC LIMIT 4"; $tv=getNewsFromLentas($q, $endq); $text.="<newsblock>"; $onblock=4;
-	for ($i=0; $i<$tv["total"]; $i++): @mysql_data_seek($tv["result"], $i); $ar=@mysql_fetch_array($tv["result"]); 
-	$text.=DrawNewsItem($ar, 0); endfor; $text.="</newsblock>"; return $text;	
+    static $offset = 0;
+    $text = "";
+    //$lentas = getLentasOnModules();
+    global $GLOBAL;
+    $q = "SELECT `[table]`.`id`, `[table]`.`name`, `[table]`.`data`, `[table]`.`comcount`, `[table]`.`pic`, '[link]' AS `link` FROM `[table]` WHERE (`[table]`.`stat`='1' && `[table]`.`onind`=1)";
+    $endq = "ORDER BY `data` DESC LIMIT $offset, $limit";
+    $offset += $limit;
+    $tv = getNewsFromLentas( $q, $endq );
+    $text .= "<newsblock>";
+    //$onblock = 4;
+    for ( $i = 0; $i < $tv["total"]; $i ++ ) {
+        @mysql_data_seek( $tv["result"], $i );
+        $ar = @mysql_fetch_array( $tv["result"] );
+        $text .= DrawNewsItem( $ar, 0 );
+    }
+    $text .= "</newsblock>";
+
+    return $text;
 }
 
 function LSTheNewestInKazan($limit=5) {
 	$lentas=LSgetLentasOnModules(); $q="SELECT `[table]`.`id`, `[table]`.`name`, `[table]`.`data`, `[table]`.`comcount`, `[table]`.`pic`, '[link]' as `link` FROM `[table]` WHERE (`[table]`.`stat`='1' && `[table]`.`onind`=1)";
 	$endq="ORDER BY `data` DESC LIMIT ".$limit; $tv=LSgetNewsFromLentas($q, $endq); $text.="<newsblock>"; $onblock=4;
-	for ($i=0; $i<$tv["total"]; $i++): @mysql_data_seek($tv["result"], $i); $ar=@mysql_fetch_array($tv["result"]); $text.=DrawNewsItem($ar, 0); endfor; $text.="</newsblock>"; return $text;	
-} 
+	for ($i=0; $i<$tv["total"]; $i++): @mysql_data_seek($tv["result"], $i); $ar=@mysql_fetch_array($tv["result"]); $text.=DrawNewsItem($ar, 0); endfor; $text.="</newsblock>"; return $text;
+}
 
 function TheCommerceInKazan($limit=5, $from=0) {
 	$lentas=getLentasOnModules(); $dataold=time()-7*24*60*60;
 	$q="SELECT `[table]`.`id`, `[table]`.`name`, `[table]`.`data`, `[table]`.`comcount`, `[table]`.`pic`, '[link]' as `link` FROM `[table]` WHERE (`[table]`.`stat`='1' && `[table]`.`data`>'".$dataold."' && `[table]`.`promo`=1)";
-	$endq="ORDER BY `data` DESC LIMIT ".$from.",".$limit; $tv=getNewsFromLentas($q, $endq); 
+	$endq="ORDER BY `data` DESC LIMIT ".$from.",".$limit; $tv=getNewsFromLentas($q, $endq);
 	if ((int)$tv["total"]>0) { $text.="<newsblock>"; $onblock=4; for ($i=0; $i<$tv["total"]; $i++): @mysql_data_seek($tv["result"], $i); $ar=@mysql_fetch_array($tv["result"]); $text.=DrawNewsItem($ar, 0); endfor; $text.="</newsblock>"; }
-	return $text;	
+	return $text;
 }
 
-function ShowProAutoBlock($limit=3, $from=0) { 
+function ShowProAutoBlock($limit=3, $from=0) {
 	global $C5; $tv=DB("SELECT `id`,`name`,`pic`,`comcount`,`data`, 'auto' as `link` FROM `auto_lenta` WHERE (`cat`=2 && `stat`=1) ORDER BY `data` DESC LIMIT ".$from.",".$limit); $text.="<newsblock>"; for ($i=0; $i<$tv["total"]; $i++): @mysql_data_seek($tv["result"], $i); $ar=@mysql_fetch_array($tv["result"]);
-	if ($i==0) { $text.="<div class='itemlist'><a href='/$ar[link]/view/$ar[id]' style='font-size:13px; font-weight:bold;'><img src='/userfiles/pictavto/$ar[pic]' style='border:none; width:200px; height:120px;'>".$C5."$ar[name]</a></div>"; } else { $text.=DrawNewsItem($ar); } endfor; $text.="</newsblock>"; return $text;	
+	if ($i==0) { $text.="<div class='itemlist'><a href='/$ar[link]/view/$ar[id]' style='font-size:13px; font-weight:bold;'><img src='/userfiles/pictavto/$ar[pic]' style='border:none; width:200px; height:120px;'>".$C5."$ar[name]</a></div>"; } else { $text.=DrawNewsItem($ar); } endfor; $text.="</newsblock>"; return $text;
 }
 
 
-function ShowUspehBlock() { 
+function ShowUspehBlock() {
 	$data=DB("SELECT `id`,`name`,`pic`,`lid`,`data`,`comcount`,'business' as `link` FROM `business_lenta` WHERE (`stat`='1' && `cat`=5) ORDER BY `data` DESC LIMIT 4");
 	if ($data["total"]>0) { $text="<h2><a href='/business/cat/5'>Школа успеха</a></h2><div class='RedBlock'>";
 	for ($i=0; $i<$data["total"]; $i++): @mysql_data_seek($data["result"], $i); $ar=@mysql_fetch_array($data["result"]); $d=ToRusData($ar["data"]);
@@ -223,7 +236,7 @@ function razdelZelen() {
 	$text.="<h2><a href='/tags/163'>Зеленодольск</a></h2><div class='RedBlock'>"; $incount=1; foreach ($table as $ar): $d=ToRusData($ar["data"]);
 		if ($incount==1) { $text.="<div class='FirstNews'><a href='/$ar[link]/view/$ar[id]'><img src='/userfiles/picnews/$ar[pic]' /><div class='Cap'>$ar[name]</h3></div></a><div class='Lid'>".CutText($ar["lid"], 100)."</div><div class='Data'>".ToLocalDay($d[4])."</div></div>";
 		} else { $text.="<div class='OtherNewsItem'><a href='/$ar[link]/view/$ar[id]'><img src='/userfiles/pictavto/$ar[pic]' /><div class='Cap'>$ar[name]</h3></div></a><div class='Data'>".ToLocalDay($d[4])."</div></div>"; }
-	$incount++; endforeach; $text.="<a href='/tags/163' class='ReadMoreLink'>Читать больше »</a>"; $text.="</div>"; return $text;			
+	$incount++; endforeach; $text.="<a href='/tags/163' class='ReadMoreLink'>Читать больше »</a>"; $text.="</div>"; return $text;
 }
 
 function ShowStreetFashioBlock($limit=3, $from=0) {
@@ -232,7 +245,7 @@ function ShowStreetFashioBlock($limit=3, $from=0) {
 
 }
 
-function ShowTopOnForumBlock($limit=3, $from=0) { 
+function ShowTopOnForumBlock($limit=3, $from=0) {
 	global $C5; $tv=DB("SELECT `id`,`name`,`comcount`,`data`, 'live' as `link` FROM `live_lenta` WHERE (`stat`=1) ORDER BY `data` DESC LIMIT ".$from.",".$limit); $text.="<newsblock>"; for ($i=0; $i<$tv["total"]; $i++): @mysql_data_seek($tv["result"], $i); $ar=@mysql_fetch_array($tv["result"]); $text.=DrawNewsItem($ar); endfor; $text.="</newsblock>"; return $text;
 }
 
@@ -244,20 +257,20 @@ function razdelBrandsBattle() {
 	$path='http://'.trim($Domains[$item["domain"]].'.'.$VARS["mdomain"], '.').'/'.$link.'/view/'.$item['id']; $block=0; $i=1; foreach ($items as $ar) { $horblock[$block]["names"].='<td>'.$ar["name"].'</td>';
 	$horblock[$block]["pics"].='<td><div class="votingImg"><a href="/userfiles/picoriginal/'.$ar["pic"].'" title=\''.$ar["name"].'\' rel="prettyPhoto[gallery]"><img title=\''.$ar["name"].'\'  src="/userfiles/picsquare/'.$ar['pic'].'" border="0" /></a></div>';
 	$horblock[$block]["pics"].='<div class="votingButton" style="color:#0082c5;">Голосов: <span class="votes">'.$ar["cnt"].'</span><br />';
-	$horblock[$block]["pics"].='<a href="javascript:void(0);" rel="nofollow" onclick=\'voteForm('.$ar["id"].', '.$item["id"].', "'.$link.'", "'.Hsc($item["name"]).'", "Я голосую за: '.Hsc($ar["name"]).'", "'.$path.'", "http://'.$VARS["mdomain"].'/userfiles/picpreview/'.$ar['pic'].'")\'>Голосовать</a>';			
+	$horblock[$block]["pics"].='<a href="javascript:void(0);" rel="nofollow" onclick=\'voteForm('.$ar["id"].', '.$item["id"].', "'.$link.'", "'.Hsc($item["name"]).'", "Я голосую за: '.Hsc($ar["name"]).'", "'.$path.'", "http://'.$VARS["mdomain"].'/userfiles/picpreview/'.$ar['pic'].'")\'>Голосовать</a>';
 	$horblock[$block]["pics"].='</div></td>'; if ($i%3==0) { $block++; } $i++; } foreach ($horblock as $block) { $content.="<tr>".$block["names"]."</tr><tr>".$block["pics"]."</tr><tr><td colspan='3'>".$C20.$C10."</td></tr>"; }
 	$votingEnd='<div style="text-align:center !important;">До окончания голосования осталось:<span class="digits"></span></div><script>setTimeout(function(){votingCountdown('.$item['votingend'].', '.$item['winnerscount'].', '.$item['id'].')}, 1000);</script>';
 	$text.='<div class="votingCon" id="node'.$item['id'].'"><span class="votingEnd" style="text-align:center !important;">'.$votingEnd.'</span>'.$C10.'<div class="voting"><table>'.$content.'</table></div><div class="Info"></div></div>';
-	return "<div class='RedBlock2'>".$text.$C10."</div><script src='/modules/tatbrand/tatbrand.js' type='text/javascript'></script><link rel='stylesheet' type='text/css' href='/modules/tatbrand/tatbrand.css' media='all' />";	
+	return "<div class='RedBlock2'>".$text.$C10."</div><script src='/modules/tatbrand/tatbrand.js' type='text/javascript'></script><link rel='stylesheet' type='text/css' href='/modules/tatbrand/tatbrand.css' media='all' />";
 }
 
 // SEMYA === SEMYA === SEMYA === SEMYA === SEMYA === SEMYA === SEMYA === SEMYA === SEMYA === SEMYA === SEMYA === SEMYA === SEMYA === SEMYA === SEMYA === SEMYA === SEMYA === SEMYA === SEMYA === SEMYA === SEMYA === SEMYA === SEMYA
- 
-function Semya3td($ar, $linked, $flag=0) { global $C; 
+
+function Semya3td($ar, $linked, $flag=0) { global $C;
 	$data=ToRusData($ar["data"]); $coms=""; if ((int)$ar["comcount"]!=0) { $coms="<span class='Coms7ya'>".(int)$ar["comcount"]."</span>"; }
 	$text.="<div class='sem3td'><a href='/".$linked."/view/".$ar["id"]."'>"; $text.="<img src='/userfiles/picintv/".$ar["pic"]."' />".$ar["name"].$coms;
 	if ($flag==1) { $text.="<div class='flag'><a href='/".$linked."/cat/".$ar["cat"]."'>".$ar["cname"]."</a></div>"; } $text.="</a></div>";	return($text);
 }
 
-function Semya3look($ar, $linked) { global $C; $data=ToRusData($ar["data"]); $text.="<div class='sem3td'><a href='/".$linked."/view/".$ar["id"]."'>"; $text.="<img src='/userfiles/lookbook/".$ar["pic"]."' />".$ar["name"]."</a></div>"; return($text); } 
+function Semya3look($ar, $linked) { global $C; $data=ToRusData($ar["data"]); $text.="<div class='sem3td'><a href='/".$linked."/view/".$ar["id"]."'>"; $text.="<img src='/userfiles/lookbook/".$ar["pic"]."' />".$ar["name"]."</a></div>"; return($text); }
 ?>
