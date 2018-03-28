@@ -164,8 +164,9 @@ adv.banner(function(webmd) {
 
 
 	// строим пагер =================================
-	$q="SELECT `[table]`.`id` FROM `[table]` WHERE (`[table]`.`stat`='1')"; $endq="";
-	$data=getNewsFromLentas($q, $endq);	$text.=Pager2($pg, $onpage, ceil($data["total"]/$onpage), "index-mobile/"."[page]");
+	//$q="SELECT `[table]`.`id` FROM `[table]` WHERE (`[table]`.`stat`='1')"; $endq="";
+	//$data=getNewsFromLentas($q, $endq);
+	$text.=Pager2($pg, $onpage, ceil($data["found_rows"]/$onpage), "index-mobile/"."[page]");
 	// ==============================================
  	return (array($text, $C));
 }

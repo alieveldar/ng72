@@ -77,8 +77,27 @@ function getLentasOnModules() { global $lentas; if (sizeof($lentas)==0) { $modul
 $q="SELECT `link` FROM `_pages` WHERE (`module` IN ('".implode("','", $modules)."') && `link` NOT IN ('".implode("','", $notin)."')) LIMIT 50"; $data=DB($q);
 for ($i=0; $i<$data["total"]; $i++) { @mysql_data_seek($data["result"],$i); $ar=@mysql_fetch_array($data["result"]); $lentas[$ar["link"]]=$ar["link"]."_lenta"; }}return $lentas; }
 
-function getNewsFromLentas($q='',$endq='') { global $used; $lentas=getLentasOnModules(); foreach ($lentas as $l=>$t) { $usedtext=""; if (sizeof($used[$l])>0) { $usedtext=" && `".$t."`.`id` NOT IN (0, ".implode(",", $used[$l]).")"; } // не включаем в выборку ранее взятые новости
-		 $qitem="(".str_replace(array("[table]","[link]"),array($t, $l),$q).") UNION "; $qitem=str_replace("[used]", $usedtext, $qitem); $query.=$qitem; } $query=trim($query, "UNION ").' '.$endq; $data=DB($query); return $data; } // заменяем таблицу и ссылку на нужное и формируем запрос
+function getNewsFromLentas($q='',$endq='') {
+    global $used;
+    $lentas = getLentasOnModules();
+    foreach ( $lentas as $l => $t ) {
+        $usedtext = "";
+        if ( sizeof( $used[ $l ] ) > 0 ) {
+            $usedtext = " && `" . $t . "`.`id` NOT IN (0, " . implode( ",", $used[ $l ] ) . ")";
+        } // не включаем в выборку ранее взятые новости
+        $qitem = "(" . str_replace( array( "[table]", "[link]" ), array( $t, $l ), $q ) . ") UNION ";
+        $qitem = str_replace( "[used]", $usedtext, $qitem );
+        $query .= $qitem;
+    }
+    $query = trim( $query, "UNION " ) . ' ' . $endq;
+    $data = DB( $query );
+	$rows = DB("SELECT FOUND_ROWS()");
+	@mysql_data_seek($rows['result'], 0);
+	$a = @mysql_fetch_array($rows['result']);
+	$data['found_rows'] = $a[0];
+
+    return $data;
+}// заменяем таблицу и ссылку на нужное и формируем запрос
 
 function LSgetNewsFromLentas($q='',$endq='') { global $used; $LSlentas=LSgetLentasOnModules(); foreach ($LSlentas as $l=>$t) { $usedtext=""; if (sizeof($used[$l])>0) { $usedtext=" && `".$t."`.`id` NOT IN (0, ".implode(",", $used[$l]).")"; } // не включаем в выборку ранее взятые новости
 		 $qitem="(".str_replace(array("[table]","[link]"),array($t, $l),$q).") UNION "; $qitem=str_replace("[used]", $usedtext, $qitem); $query.=$qitem; } $query=trim($query, "UNION ").' '.$endq; $data=DB($query); return $data; } // заменяем таблицу и ссылку на нужное и формируем запрос

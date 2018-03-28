@@ -14,13 +14,13 @@ if ($UserSetsSite[0]==1) {
 	}
 
 	if ($start=="view2") {
-		list($text, $cap)=GetUsersId(); 
+		list($text, $cap)=GetUsersId();
 		$edit="<div id='AdminEditItem'><a href='".$GLOBAL["mdomain"]."/admin/?cat=adm_usersedit&id=".(int)$dir[2]."'>Редактировать</a></div>";
 		/* Компании пользователя */ if($_SESSION['userid'] && $dir[2] && $_SESSION['userid']==$dir[2]) $text.=userInnerCompanies();
 		/* Альбомы пользователя */ if($_SESSION['userid'] && $dir[2] && $_SESSION['userid']==$dir[2]) $text.=userAlbums();
 	}
-	
-	
+
+
 
 	if ($start=="mysets") { if ($_SESSION["userid"]!=0) { list($text, $cap)=GetUsersSets(); } else { $text=@file_get_contents($ROOT."/template/403.html"); $cap="Доступ закрыт - 403"; $Page404=1; }}
 	if ($start=="mylist") { if ($_SESSION["userid"]!=0) { list($text, $cap)=GetUsersList(); } else { $text=@file_get_contents($ROOT."/template/403.html"); $cap="Доступ закрыт - 403"; $Page404=1; }}
@@ -28,7 +28,7 @@ if ($UserSetsSite[0]==1) {
 	if ($start=="lostid") { $cap="Доступ закрыт";  $text="<b>Это могло случиться по нескольким причинам:</b><ul><li>Истекло время жизни сессии: авторизуйтесь ещё раз</li><li>На сайте идет модернизация: работа некоторых модулей нестабильна</li><li>Доступ закрыт администратором: скорее всего, вы нарушили правила сайта</li></ul>";$Page404=1; }
 } else { $text=@file_get_contents($ROOT."/template/404.html"); $cap="Страница не найдена - 404"; $Page404=1; }
 
-if ($GLOBAL["USER"]["role"]>2) { $text=$C.$edit.$C.$text; } $Page["Content"] = $text; $Page["Caption"] = $cap; 
+if ($GLOBAL["USER"]["role"]>2) { $text=$C.$edit.$C.$text; } $Page["Content"] = $text; $Page["Caption"] = $cap;
 
 #############################################################################################################################################
 
@@ -41,8 +41,8 @@ function GetUsersId() {
 	$data=DB("SELECT `".$table."`.*  FROM `".$table."` WHERE (`id`='".(int)$dir[2]."') LIMIT 1");
 	if ($data["total"]==0) { $text=@file_get_contents($ROOT."/template/404.html"); $cap="Пользователь не найден"; $Page404=1;
 	} else {
-		@mysql_data_seek($data["result"], 0); $ar=@mysql_fetch_array($data["result"]); $cap=$ar["nick"]; $d=ToRusData($ar["created"]); 
-		
+		@mysql_data_seek($data["result"], 0); $ar=@mysql_fetch_array($data["result"]); $cap=$ar["nick"]; $d=ToRusData($ar["created"]);
+
 		if ((int)$ar["lasttime"]!=0) { if ((time()-$ar["lasttime"])>600) { $l=ToRusData($ar["lasttime"]); } else {$l[1]="<b style='color:green;'>Сейчас на сайте<b>"; }} else { $l[1]="<i style='color:red;'>нет</i>"; }
 		$text.="<div class='WhiteBlock'><table width=100%>";
 		$text.="<tr>"; if ($ar["avatar"]!="" && is_file($ROOT."/".$ar["avatar"]) && filesize($ROOT."/".$ar["avatar"])>100) { $text.="<td rowspan=4 valign=top class='UserAvatar'><img src='/".$ar["avatar"]."' /></td>"; }
@@ -51,7 +51,7 @@ function GetUsersId() {
 		$text.="<tr><td><b>Регистрация:</b> ".$d[1]."</td></tr><tr><td><b>Вход на сайт:</b> ".$l[1]."</td></tr>";
 		//$text.="<tr><td><b>Рейтинг:</b> ".$ar["karma"]."</td>"; $text.="</tr><tr><td colspan=2><b>Подпись:</b> ".$ar["signature"]."</td></tr>";
 		$text.="</table></div>".$C15."<h2>Все материалы автора:</h2>".$C15;
-		
+
 		$onpage=15; $pg = $dir[3] ? $dir[3] : 1; $from=($pg-1)*$onpage; $q="SELECT `[table]`.`id`, `[table]`.`uid`, `[table]`.`name`, `[table]`.`data`, `[table]`.`comcount`, `[table]`.`pic`, `[table]`.`onind`, '[link]' as `link`
 		FROM `[table]` WHERE (`[table]`.`stat`='1' && `[table]`.`uid`='".(int)$dir[2]."')"; $endq="ORDER BY `data` DESC LIMIT ".$from.", ".$onpage; $data=getNewsFromLentas($q, $endq);
 		for ($i=0; $i<$data["total"]; $i++) { @mysql_data_seek($data["result"], $i); $ar=@mysql_fetch_array($data["result"]); $d=ToRusData($ar["data"]); $pic="";
@@ -59,11 +59,12 @@ function GetUsersId() {
 			if ($ar["uid"]!=0 && $ar["nick"]!="") { $auth="<a href='/users/view/".$ar["uid"]."/'>".$ar["nick"]."</a>"; } else { $auth="<a href='/add/2/'>Народный корреспондент</a>"; }
 			if ($UserSetsSite[3]==1 && $ar["comments"]!=2) { $coms="<div class='CommentBox'><a href='/".$ar["link"]."/view/".$ar["id"]."#comments'>".$ar["comcount"]."</a></div>"; } else { $coms=""; }
 			$text.="<div class='NewsLentaList' id='NewsLentaList-".$ar["id"]."'><a href='/".$ar["link"]."/view/".$ar["id"]."'>".$pic."</a><h2><a href='/".$ar["link"]."/view/".$ar["id"]."'>".$ar["name"]."</a></h2>".$C."
-			<div class='Info'><div class='Other'>".Replace_Data_Days($d[4])."</div>".$coms."</div></div>"; $text.=$C25; 
+			<div class='Info'><div class='Other'>".Replace_Data_Days($d[4])."</div>".$coms."</div></div>"; $text.=$C25;
 		}
 		// строим пагер =================================
-		$q="SELECT `[table]`.`id` FROM `[table]` WHERE (`[table]`.`stat`='1' && `[table]`.`uid`='".(int)$dir[2]."')"; $endq="";
-		$data=getNewsFromLentas($q, $endq);	$text.=Pager2($pg, $onpage, ceil($data["total"]/$onpage), $dir[0]."/".$dir[1]."/".$dir[2]."/"."[page]").$C25;
+		//$q="SELECT `[table]`.`id` FROM `[table]` WHERE (`[table]`.`stat`='1' && `[table]`.`uid`='".(int)$dir[2]."')"; $endq="";
+		//$data=getNewsFromLentas($q, $endq);
+		$text.=Pager2($pg, $onpage, ceil($data["found_rows"]/$onpage), $dir[0]."/".$dir[1]."/".$dir[2]."/"."[page]").$C25;
 
 		/*
 		#### Слежение за комментариями
@@ -75,7 +76,7 @@ function GetUsersId() {
 		$news=array(); foreach ($ids as $link=>$pids) { $tab=$link."_lenta"; $data=DB("SELECT `$tab`.`id`, `$tab`.`name`, `$tab`.`comcount`, (select `_comments`.`data` from `_comments` WHERE (`_comments`.`pid`=`$tab`.`id` AND `_comments`.`link`='$link' AND `_comments`.`pid` IN ($pids)) ORDER BY `_comments`.`data` DESC LIMIT 1) as `data` 	, (select concat_ws('|', `_comments`.`uid`, `_users`.`nick`) from `_comments` LEFT JOIN `_users` ON `_comments`.`uid`=`_users`.`id`  WHERE (`_comments`.`pid`=`$tab`.`id` AND `_comments`.`link`='$link' AND `_comments`.`pid` IN ($pids)) ORDER BY `_comments`.`data` DESC  LIMIT 1) as `user`
 		FROM `$tab` WHERE (`$tab`.`id` IN ($pids) && `$tab`.`comcount`>0) GROUP BY 1 LIMIT 50");
 		for($i=0; $i<$data["total"]; $i++) { @mysql_data_seek($data["result"], $i); $ar=@mysql_fetch_array($data["result"]); $ar["link"]=$link; $news[]=$ar; }} $ars=array(); foreach($news as $key=>$arr){ $ars[$key]=$arr['data']; } array_multisort($ars, SORT_DESC, $news);
-		if (sizeof($news)>0) {	
+		if (sizeof($news)>0) {
 			$text.="<table class='RefreshTable'><tr class='TableHead'><td>Публикация</td><td>Ответов</td><td>Обновлено</td></tr>";
 			$j=0; foreach($news as $i=>$item) { $j++; $link=$item["link"]; $id=$item["id"]; $path=""; $clas="tdrow".$j%2; $d=ToRusData($item["data"]); list($item["uid"], $item["nick"])=explode("|", $item["user"]); $path="http://".$VARS["mdomain"]."/".$link."/view/".$id."#comments";
 			if ($item["uid"]!=0 && $item["nick"]!="") { $user="<a href='/users/view/$item[uid]/'><u>".$item["nick"]."</u></a>"; } else { $user="Гость сайта"; }
@@ -98,14 +99,14 @@ function GetUsersSets() {
 	<div class='Lab'>Введите подпись для форума</div><input class='Inp380' id='uforum' type='text' value='$USER[signature]' maxlenght='255' />
 	<div class='Lab'>Введите E-mail (обещаем отправлять только уведомления)</div><input class='Inp380' id='umail' type='text' value='$USER[mail]' maxlenght='255' placeholder='ваш E-mail' />";
 	if ($ufrom=="") { $text.="<div class='Lab'>Сменить пароль от аккаунта</div><input class='Inp380' id='upass' type='text' maxlenght='64' placeholder='новый пароль' />".$C;
-	} else { $text.="<div class='Lab' style='display:none;'>Сменить пароль от аккаунта</div><input class='Inp380' id='upass' type='hidden' maxlenght='64' placeholder='новый пароль' />".$C; } 
+	} else { $text.="<div class='Lab' style='display:none;'>Сменить пароль от аккаунта</div><input class='Inp380' id='upass' type='hidden' maxlenght='64' placeholder='новый пароль' />".$C; }
 	$text.="<input type='submit' name='sendbutton' id='sendbutton' class='SaveButton' value='Сохранить настройки' onClick='SaveSettings();'></div></div>
 	<div class='Avatar' id='AvatarT'><div id='AvatarI'>".$avatar."</div><span class='Info'>Вы можете загрузить картинку на аватар.<br>Рекомендуемый размер: 100x100px</span>
 	<form action='return false;' enctype='multipart/form-data'><div title='Нажмите для выбора файла' id='Podstava' class='Podstava1'>
 	<input type='file' id='uavatar' name='uavatar' accept='image/jpeg,image/gif,image/x-png' onChange='StartUploadAvatar();' /></div></form></div>".$C."</div>";
 	### Авторизация и объединение
 	$URL=rawurlencode("http://".$VARS["mdomain"]."/modules/standart/SocialAddAccount.php?back=http://".$RealHost."/".$RealPage); $ipath="http://".$VARS["mdomain"]."/template/standart/icons/";
-	$UserFrom = array(""=>$VARS["mdomain"], "vk"=>"ВКонтакте", "fb"=>"FaceBook", "ml"=>"Mail.ru", "tw"=>"Twitter", "od"=>"Однoклассники", "gl"=>"Google+", "ya"=>"Яндекс"); 
+	$UserFrom = array(""=>$VARS["mdomain"], "vk"=>"ВКонтакте", "fb"=>"FaceBook", "ml"=>"Mail.ru", "tw"=>"Twitter", "od"=>"Однoклассники", "gl"=>"Google+", "ya"=>"Яндекс");
 	$UserIcon = array(""=>"thissite.png", "vk"=>"vkontakte.png", "fb"=>"facebook.png", "ml"=>"mail.png", "tw"=>"twitter.png", "od"=>"odnoklassniki.png", "gl"=>"google.png", "ya"=>"yandex.png");
 	$auth=$C5."<div class='UserFrom'><img src='".$ipath.$UserIcon[$ufrom]."' />Текущая авторизация через <b>".$UserFrom[$ufrom]."</b></div>".$C10;
 	if ($USER["vkontakte"]!="" && $ufrom!="vk") { $accounts.="<div class='UserFrom' id='UserFrom-vk'><img src='".$ipath.$UserIcon["vk"]."' />Связано. <a href='javascript:void(0);' onClick='EraseSocial(\"vk\");'>Отменить</a></div>".$C; }
@@ -118,7 +119,7 @@ function GetUsersSets() {
 	$text.=$C10."<h3>Связать аккаунт</h3>".$C10."<div class='WhiteBlock'>".$auth."<p>Вы можете объединить все свои учетные записи социальных сетей в рамках одного аккаунта на нашем сайте. 
 	Все комментарии, фотографии и материалы, добавленные через любую учетную запись социальных сетей, будут подписываться и отображаться от именни одного аккаунта. Так же общими станут настройки, обновления и подписки на темы сайта.</p>
 	".$C10."<b>Выберите социальную сеть, к которой необходимо создать привязку:</b>".$C10."<div id='uLogin' x-ulogin-params='display=panel&fields=first_name,last_name,photo&providers=".$GLOBAL["Providers"]."&redirect_uri=".$URL."'></div>".$C10."
-	<div class='Info'>Социальные сети не передают нам логин и пароль, мы получаем имя и аватар пользователя.</div></div>"; if ($accounts!="") { $text.=$C10."<h3>Связанные аккаунты</h3>".$C10."<div class='WhiteBlock'>".$accounts."</div>"; }	
+	<div class='Info'>Социальные сети не передают нам логин и пароль, мы получаем имя и аватар пользователя.</div></div>"; if ($accounts!="") { $text.=$C10."<h3>Связанные аккаунты</h3>".$C10."<div class='WhiteBlock'>".$accounts."</div>"; }
 	return(array($text, $cap));
 }
 
@@ -151,7 +152,7 @@ function userCompanies(){
 	if($query) { $query .= " UNION "; } $query.="(SELECT `".$table2."`.id, `".$table2."`.name, `".$table2."`.pic, '".$ar['link']."' as `link` FROM `".$table2."` WHERE (`".$table2."`.`uid`=".$_SESSION['userid'].")) ORDER BY `name` ASC"; }
 		$data=DB($query); if ($data["total"]) { $text.=$C15.'<h2>Компании:</h2>'.$C5;
 			for ($i=0; $i<$data["total"]; $i++) { @mysql_data_seek($data["result"], $i); $ar=@mysql_fetch_array($data["result"]); $pic = ''; if ($ar["pic"]!="") $pic = "<a href='/".$ar['link']."/view/".$ar["id"]."'><img src='/userfiles/picpreview/".$ar["pic"]."' title='".$ar["name"]."' width='50' /></a>";
-				$text.="<div class='WhiteBlock' id='company_".$ar["id"]."'>"; if ($pic!="") { $text.="<div class='companyPic' style='float:left; margin-right:15px;'>$pic</div>"; } $text.="<h4><a href='/".$ar['link']."/view/".$ar["id"]."' target='_blank' style='color:#000;'><u>".$ar["name"]."</u></a></h4>";						
+				$text.="<div class='WhiteBlock' id='company_".$ar["id"]."'>"; if ($pic!="") { $text.="<div class='companyPic' style='float:left; margin-right:15px;'>$pic</div>"; } $text.="<h4><a href='/".$ar['link']."/view/".$ar["id"]."' target='_blank' style='color:#000;'><u>".$ar["name"]."</u></a></h4>";
 				$text.="<p style='margin-top:7px;'><a href='/".$ar['link']."/view/".$ar["id"]."' target='_blank'>Просмотр описания</a>  |  <a href='/".$link."/mystat/".$ar["id"]."'>Статистика показа баннеров</a></p>"; $text.=$C5.'<div class="CBG"></div>'.$C15; $text.="</div>";
 	}}} return $text;
 }
@@ -170,13 +171,13 @@ function userInnerCompanies(){
 		$data=DB($query);
 		if ($data["total"]) {
 			$text .= '<script type="text/javascript" src="http://maps.api.2gis.ru/1.0"></script><script type="text/javascript" src="/modules/companies/companies.js"></script><link type="text/css" href="/modules/companies/companies.css" rel="stylesheet" /><h2>Компании:</h2>';
-			for ($i=0; $i<$data["total"]; $i++) { @mysql_data_seek($data["result"], $i); $ar=@mysql_fetch_array($data["result"]); $pic = '';						
+			for ($i=0; $i<$data["total"]; $i++) { @mysql_data_seek($data["result"], $i); $ar=@mysql_fetch_array($data["result"]); $pic = '';
 				if ($ar["pic"]!="") $pic = "<a href='/".$ar['link']."/view/".$ar["id"]."'><img src='/userfiles/picpreview/".$ar["pic"]."' title='".$ar["name"]."' /></a>";
 				$text.="<div class='WhiteBlock' id='company_".$ar["id"]."'>";
 				$text.="<div class='companyPic'>$pic</div>";
-				$text.="<h2><a href='/".$ar['link']."/view/".$ar["id"]."' class='CompanyName'>".$ar["name"]."</a></h2>";						
+				$text.="<h2><a href='/".$ar['link']."/view/".$ar["id"]."' class='CompanyName'>".$ar["name"]."</a></h2>";
 				if ($ar["anonce"]!="") $text.=$C5."<p>".$ar["anonce"]."</p>";
-				
+
 				$data2=DB("SELECT * FROM ".$ar["link"]."_contacts WHERE (`pid`=".$ar["id"].")");
 				if ($data2["total"]){
 					for ($j=0; $j<$data2["total"]; $j++) { @mysql_data_seek($data2["result"], $j); $ar2=@mysql_fetch_array($data2["result"]);
@@ -184,7 +185,7 @@ function userInnerCompanies(){
 						if($ar2["phone"]) $text.="<strong class='phone'>, тел: <span>".$ar2["phone"]."</span></strong>";
 						$text.="<span style='display:none;'><span class='maps'>".$ar2["maps"]."</span><span class='worktime'>".$ar2["worktime"]."</span></span>";
 						$text.="<a href='javascript:void(0);' onclick='showMap(".$ar["id"].", $(this))' class='lookOnMap'>Посмотреть на карте</a></p>";
-					}				
+					}
 				}
 				$text.=$C10.'<div class="CBG"></div>'.$C10.'<h4>Акции компани</h4>';
 				$data2=DB("SELECT * FROM ".$ar["link"]."_actions WHERE (`pid`=".$ar["id"].")");
@@ -194,10 +195,10 @@ function userInnerCompanies(){
 						$stat = $ar2['stat'] ? 'ВКЛ' : 'ВЫКЛ'; if($ar2["todata"]) $d=ToRusData($ar2["todata"]);
 						$text .= '<tr><td><a href="/'.$ar['link'].'/action/view/'.$ar2["id"].'" target="_blank">'.$ar2["name"].'</a></td><td>'.$stat.'</td><td>'.$d[5].'</td><td style="text-align:center;"><a href="/'.$ar['link'].'/action/edit/'.$ar2["id"].'"><img src="/template/standart/edit.png" title="Редактировать" /></a></td></tr>';
 					}
-					$text .= '</table>';				
+					$text .= '</table>';
 				}
 				$text .= '<a href="/'.$ar['link'].'/action/add/'.$ar["id"].'" class="addAction"><img src="/template/standart/add.png" style="vertical-align:middle;" /> Добавить акцию</a>';
-				
+
 				$table3 = $ar["link"]."_qa"; $table4 = $ar["link"]."_cats";
 				$data3=DB("SELECT t3.*, t4.id AS cid, t4.name AS cname, t2.id AS aid FROM ".$table3." AS t3 LEFT JOIN ".$table4." AS t4 ON t4.id=t3.rid LEFT JOIN ".$table3." AS t2 ON t2.pid=t3.id AND t2.cid=".$ar["id"]." WHERE (t3.`pid`=0 AND t3.rid in (".trim($ar["consultscats"], ',').")) GROUP BY 1");
 				if ($data3["total"]){
@@ -206,11 +207,11 @@ function userInnerCompanies(){
 						$status = $ar3["aid"]  ? '<div id="Act'.$ar3["aid"].'"><a href="/'.$ar['link'].'/answer/edit/'.$ar3["aid"].'"><img src="/template/standart/edit.png" title="Редактировать" /></a> <a href="javascript:void(0);" onclick="ItemDelete('.$ar3["aid"].', \''.$table3.'\')"><img src="/template/standart/exit.png" width="16" title="Удалить" /></a></div>' : '<a href="/'.$ar['link'].'/answer/add/'.$ar3["id"].'/"><img src="/template/standart/add.png" title="Ответить" /></a>';
 						$text .= '<tr><td><p><strong>'.$ar3["name"].':</strong></p><a href="/'.$ar['link'].'/question/view/'.$ar3["id"].'">'.$ar3["text"].'</a></td><td><a href="/'.$ar['link'].'/consult/'.$ar3["cid"].'" target="_blank">'.$ar3["cname"].'</a></td><td>'.$status.'</td><td>'.$d[5].'</td></tr>';
 					}
-					$text .= '</table>';				
+					$text .= '</table>';
 				}
-				
+
 				$text.=$C."</div>".$C25;
-			}		
+			}
 		}
 	}
 	return $text;
@@ -220,7 +221,7 @@ function userInnerCompanies(){
 
 #############################################################################################################################################
 
-function userAlbums() { 
+function userAlbums() {
 	global $VARS, $GLOBAL, $dir, $ORDERS, $RealHost, $Page, $node, $link, $UserSetsSite, $C, $C20, $C10, $C25; $data=DB("SELECT `link` FROM `_pages` WHERE (`module`='photoalbum')");
 	if($data['total']){ $query = ''; for ($i=0; $i<$data["total"]; $i++) { @mysql_data_seek($data["result"], $i); $ar=@mysql_fetch_array($data["result"]); $table = $ar['link'].'_albums'; 	$table2 = $ar['link'].'_photos';
 	if($query) { $query .= " UNION "; } $query .="(SELECT `".$table."`.`id`, `".$table."`.`name`, `".$table."`.`data`, '".$ar['link']."' AS `link`, (SELECT `".$table2."`.`pic` FROM `".$table2."` WHERE (`".$table2."`.`pid`=`".$table."`.`id`) ORDER BY `".$table2."`.`rate` ASC LIMIT 1) AS `photo1`, `".$table2."`.`pic` FROM `".$table."` LEFT JOIN `".$table2."` ON `".$table2."`.`main`=1 AND `".$table2."`.`pid`=`".$table."`.`id` WHERE (`".$table."`.`stat`=1 AND `".$table."`.`uid`=".$_SESSION['userid'].") GROUP BY 1)"; }
@@ -246,7 +247,7 @@ function GetUsersBannerStat() {
 			for ($i=0; $i<$data["total"]; $i++) { @mysql_data_seek($data["result"], $i); $ar=@mysql_fetch_array($data["result"]); $bans[$ar["id"]]=$ar; $bids[]=$ar["id"]; }
 			if (sizeof($bans)==0) { $text="У текущей компании нет активных баннеров"; } else {
 				foreach($bans as $id=>$ban) {
-					if ($ban["stat"]==1) {$stat="<span style='font-size:13px; color:green;'>активен</span>";} else {$stat="<span style='font-size:13px; color:red;'>отключен</span>";}	
+					if ($ban["stat"]==1) {$stat="<span style='font-size:13px; color:green;'>активен</span>";} else {$stat="<span style='font-size:13px; color:red;'>отключен</span>";}
 					$text.="<h3>Баннер №".$id." «".$ban["name"]."» / ".$stat."</h3>"; $dp1=ToRusData($ban["datafrom"]); $dp2=ToRusData($ban["datato"]);
 					$text.="<span style='font-size:10px; color:#999;'>Размещение баннера с <b>".$dp1[5]."</b> по <b>".$dp2[5]."</b>, $ban[pname] -> $ban[width] x $ban[height]</span>".$C10;
 					$text.=GetUsersBannerStatTable($id, $d1[11], $d2[11]).$C20;
@@ -263,12 +264,12 @@ function GetUsersBannerStatTable($id, $d1, $d2) {
 
 	### Обработка статистики
 	$qu="SELECT * FROM `_banners_stat` WHERE (`bid`='$id' && `data`>='$d2' && `data`<='$d1') order by `data` ASC"; $q=DB($qu);
-	if ($q["total"]==0) { $stat="<tr><td><i>Нет статистики за выбранный период</i></td></tr>"; $hs=0; } else { $mc=0; $ms=0; $ss=0; $sc=0; 
+	if ($q["total"]==0) { $stat="<tr><td><i>Нет статистики за выбранный период</i></td></tr>"; $hs=0; } else { $mc=0; $ms=0; $ss=0; $sc=0;
 		for($i=0; $i<$q["total"]; $i++) { @mysql_data_seek($q["result"], $i); $ar=@mysql_fetch_array($q["result"]); if ($ar["c"]>$mc) { $mc=$ar["c"]; } if ($ar["s"]>$ms) { $ms=$ar["s"]; }	$ss=$ss+$ar["s"]; $uss=$uss+$ar["us"]; $cc=$cc+$ar["c"]; $ucc=$ucc+$ar["uc"];}
 		for($i=0; $i<$q["total"]; $i++)
 		{
-			@mysql_data_seek($q["result"], $i); $ar=@mysql_fetch_array($q["result"]); $d=ToRusDataAlt($ar["data"]); $d1=""; $d2=""; 
-			$stat.="<tr  class='TRLineHR VarText'><td>$d[3]</td><td class='B1'>$ar[s]</td><td class='B2'>$ar[c]</td><td class='B3'>".round($ar["c"]/($ar["s"]+1)*100, 2)."% </td></tr>"; 
+			@mysql_data_seek($q["result"], $i); $ar=@mysql_fetch_array($q["result"]); $d=ToRusDataAlt($ar["data"]); $d1=""; $d2="";
+			$stat.="<tr  class='TRLineHR VarText'><td>$d[3]</td><td class='B1'>$ar[s]</td><td class='B2'>$ar[c]</td><td class='B3'>".round($ar["c"]/($ar["s"]+1)*100, 2)."% </td></tr>";
 		}
 	}
 	### Основные данные
