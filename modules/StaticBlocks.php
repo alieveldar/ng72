@@ -80,16 +80,28 @@ for ($i=0; $i<$data["total"]; $i++) { @mysql_data_seek($data["result"],$i); $ar=
 function getNewsFromLentas($q='',$endq='') {
     global $used;
     $lentas = getLentasOnModules();
+    $query = '';
+    if ( false !== ( $limwpos = strpos( strtoupper( $endq ), 'LIMIT' ) ) &&
+         ( $colonpos = strpos( $endq, ',', $limwpos ) ) ) {
+        $oldlimit = explode( 'LIMIT', strtoupper( $endq ) );
+        if ( 1 > (int) substr( $endq, $limwpos + 5, $colonpos - strlen( $endq ) ) ) {
+            $newlimit = substr( $endq, $colonpos + 1 );
+            $single_endq = str_replace( $oldlimit, ' ' . trim( $newlimit ), $endq );
+        } else {
+            $single_endq = str_replace('LIMIT' . $oldlimit[count($oldlimit) - 1], '', $endq);
+        }
+    } else {
+        $single_endq = $endq;
+    }
     foreach ( $lentas as $l => $t ) {
         $usedtext = "";
         if ( sizeof( $used[ $l ] ) > 0 ) {
             $usedtext = " && `" . $t . "`.`id` NOT IN (0, " . implode( ",", $used[ $l ] ) . ")";
         } // не включаем в выборку ранее взятые новости
-        $qitem = "(" . str_replace( array( "[table]", "[link]" ), array( $t, $l ), $q ) . ") UNION ";
-        $qitem = str_replace( "[used]", $usedtext, $qitem );
-        $query .= $qitem;
+        $qitem = "(" . str_replace( array( "[table]", "[link]" ), array( $t, $l ), $q ) . $single_endq . ") UNION ALL ";
+        $query .= str_replace( "[used]", $usedtext, $qitem );
     }
-    $query = trim( $query, "UNION " ) . ' ' . $endq;
+    $query = trim( $query, "UNION ALL" ) . ' ' . $endq;
     $data = DB( $query );
 	$rows = DB("SELECT FOUND_ROWS()");
 	@mysql_data_seek($rows['result'], 0);
