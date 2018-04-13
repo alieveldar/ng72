@@ -53,7 +53,27 @@ function LEFT() {
 		}
 
 
-	$cnt++; } return $text;
+	$cnt++; }
+    $text .= "<!-- SVK-Native -->
+<script type=\"text/javascript\" data-key=\"f9d8c6f4d86d8f4ae626834601492846\">
+	(function(w, a) {
+		(w[a] = w[a] || []).push({
+			'script_key': 'f9d8c6f4d86d8f4ae626834601492846',
+			'settings': {
+				'w': 16225
+			}
+		});
+		if(!window['_SVKNative_embed']) {
+			var node = document.createElement('script'); node.type = 'text/javascript'; node.async = true;
+			node.src = '//widget.svk-native.ru/js/embed.js';
+			(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(node);
+		} else {
+			window['_SVKNative_embed'].initWidgets();
+		}
+	})(window, '_svk_n_widgets');
+</script>
+<!-- /SVK-Native -->";
+	return $text;
 }
 
 ### --- ### --- ### --- ### --- ### --- ### --- ### --- ### --- ### --- ### --- ### --- ### --- ### --- ### --- ### --- ### --- ### --- ### --- ### --- ### --- ### --- ### --- ### --- ### --- ### --- ### --- ### --- ### --- ###
