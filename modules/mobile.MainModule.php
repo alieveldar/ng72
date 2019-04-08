@@ -165,7 +165,12 @@ if ($data["total"]==0){
 ############################################################################################################################################
 
 // Определение шаблона сайта ==================================================================================================================================================
-$design="mobile";
+if ($node["design"] == "0" || $node["design"] == "" || $Page404 == 1) {
+	$design="mobile";
+}
+else {
+	$design = $node["design"];
+}
 $GLOBAL["log"].="<i>Шаблон дизайна</i>: мобильная версия<hr>";
 
 // Загрузка шаблона сайта =====================================================================================================================================================
@@ -241,9 +246,26 @@ echo '<meta name="viewport" content="width=device-width. initial-scale=1.0">'.$r
 echo '<link rel="shortcut icon" href="/favicon.png" type="image/x-icon" />'.$r;
 echo $GLOBAL["CSSModules"];
 echo $GLOBAL["JSModules"];
+echo '<script src="https://yastatic.net/pcode/adfox/loader.js" crossorigin="anonymous"></script>';
 echo '</head>'.$r.'<body>'.$r;
 
-echo "<div class='Banner' id='Banner-31-1' style='text-align:center;'></div>";
+//echo "<div class='Banner' id='Banner-31-1' style='text-align:center;'></div>";
+if($design != "akbars") {
+echo '
+<style>#adfox_152829450738061155{max-width:490px;}</style>
+<div id="adfox_152829450738061155"></div>
+<script>
+    window.Ya.adfoxCode.create({
+        ownerId: 272568,
+        containerId: "adfox_152829450738061155",
+        params: {
+            pp: "g",
+            ps: "cukh",
+            p2: "fxra"
+        }
+    });
+</script>';
+}
 echo $DesignHtml.$r;
 echo "";
 echo '</body>'.$r.'<input type="hidden" id="BoxCount" value="0" /><input type="hidden" id="DomainId" value="'.(int)$SubDomain.'" /></html>';

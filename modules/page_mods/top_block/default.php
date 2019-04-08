@@ -35,7 +35,7 @@ function getWidgetsInHead() {
 	// --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
 	$text.="<a href='#' target='_blank' class='info' title='Курс валюты'><b>$</b>=".$usd."  <b>€</b>=".$euro."</a>";
 	$text.="<noindex>";
-		$text.="<a href='http://pressa-online.com/tabid/140/Default.aspx?aid=e1a68562-61a1-4c57-b0d1-8b7310037e8b&iid=182045&stage=2' target='_blank' class='info' rel='nofollow' title='Свежий номер «Нашей Газеты»'>Читайте свежий номер  «<u>Нашей газеты</u>»</a>";
+		$text.="<a href='https://yadi.sk/d/wkkbqQnO3W53o6' target='_blank' class='info' rel='nofollow' title='Свежий номер «Нашей Газеты»'>Читайте свежий номер  «<u>Нашей газеты</u>»</a>";
 		$text.="<a href='/search' class='info'><img src='/template/standart/icons/search.png' />Поиск по сайту</a>";
 	$text.="</noindex>";
 	// --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---

@@ -1,6 +1,8 @@
 <?
 $file="_leftblock-pkdefault"; if (RetCache($file, "cacheblock")=="true") { list($Page["LeftContent"], $cap)=GetCache($file, 0); } else { list($Page["LeftContent"], $cap)=CreateLeftBlock(); SetCache($file, $Page["LeftContent"], "", "cacheblock"); }
 
+if ($link!="adverting") { $Page["LeftContent"]=str_replace(array("<!--yandex1-->","<!--yandex2-->","<!--google-->"), array($yandex1, $yandex2, $google), $Page["LeftContent"]); }
+
 function CreateLeftBlock() {
 	global $Domains, $SubDomain, $GLOBAL, $C20, $C10, $C25, $C, $used; $text=''; $src=""; $advs=array(); $news=array(); $list=array(); $tmplist=array(); $advid=0; $advsid=0; $cnt=1;
 	// --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
@@ -20,7 +22,22 @@ function CreateLeftBlock() {
 			$text.=$ar["name"].specIconOnTags($ar)."</a>".$C.Dater($ar);
 		$text.="</div>".$C20;
 		if ($cnt%4==0) {
-			if ($ban10<10) { $text.="<div class='banner3' id='Banner-10-".$ban10."'></div>"; $ban10=$ban10+2; }
+			//if ($ban10<10) { $text.="<div class='banner3' id='Banner-10-".$ban10."'></div>"; $ban10=$ban10+2; }
+            if($cnt < 9) {
+                $text .= $C10 . '
+<div id="adfox_152829446223292721-l' . $cnt / 4 . '"></div>
+<script>
+    window.Ya.adfoxCode.create({
+        ownerId: 272568,
+        containerId: \'adfox_152829446223292721-l' . $cnt / 4 . '\',
+        params: {
+            pp: \'g\',
+            ps: \'cukh\',
+            p2: \'fxrc\'
+        }
+    });
+</script>' . $C10;
+            }
 /*		if ($cnt == 12){
 			$text.="<div><script src='//mediametrics.ru/partner/inject/inject.js' type='text/javascript' id='MediaMetricsInject' data-width='240' data-height='400' data-img='true' data-imgsize='70' data-type='img' data-bgcolor='FFFFFF' data-bordercolor='000000' data-linkscolor='232323' data-transparent='false' data-rows='5' data-inline='' data-font='middle' data-fontfamily='roboto' data-border='false' data-borderwidth='1' data-alignment='vertical' data-country='ru'> </script></div>";
 }*/

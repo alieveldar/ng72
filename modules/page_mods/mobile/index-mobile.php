@@ -27,10 +27,25 @@ function KazanNews() { $C="";
 		<div class='Info'><div class='Other'>".Replace_Data_Days($d[4]).",  Автор: ".$auth."</div>".$coms."</div></div>";
 		$text .= '<!--' . $position . '-->';
 
+		if($position == 1) {
+			$text .= '
+<div id="adfox_152809539029958275"></div> 
+<script> 
+window.Ya.adfoxCode.create({ 
+ownerId: 272568, 
+containerId: \'adfox_152809539029958275\', 
+params: { 
+pp: \'g\', 
+ps: \'cukh\', 
+p2: \'fxqz\' 
+} 
+}); 
+</script>' . $C15;
+		}
 		if ($position == 2)
 		{
-			$text .= '<script src="https://yastatic.net/pcode/adfox/loader.js" crossorigin="anonymous"></script><script type="text/javascript" src="https://oriondigital.ru/ad/adorion.js?574856"></script>';
-			$text .='<div id="adfox_15108376965161432"></div>
+			$text .= '<script type="text/javascript" src="https://oriondigital.ru/ad/adorion.js?574856"></script>';
+			/*$text .='<div id="adfox_15108376965161432"></div>
 <script>
     window.Ya.adfoxCode.create({
         ownerId: 251657,
@@ -65,7 +80,7 @@ p1: \'bznhf\',
 p2: \'vd\'
 }
 });
-</script>';
+</script>';*/
 		}
 
 		if ($position == 3){
@@ -74,27 +89,69 @@ p2: \'vd\'
 
 		if ($position === 4)
 		{
-			$text .= '<div class="Banner" id="Banner-32-1"></div>' . $C15;
+			//$text .= '<div class="Banner" id="Banner-32-1"></div>' . $C15;
+		}
+
+		if($position == 9) {
+			$text .= '
+<div id="adfox_152829433053614155"></div>
+<script>
+    window.Ya.adfoxCode.create({
+        ownerId: 272568,
+        containerId: \'adfox_152829433053614155\',
+        params: {
+            pp: \'g\',
+            ps: \'cukh\',
+            p2: \'fxrb\'
+        }
+    });
+</script>' . $C15;
 		}
 
 		if ($position === 14)
 		{
-			$text .= '<div class="Banner" id="Banner-33-1"></div>' . $C15;
+			//$text .= '<div class="Banner" id="Banner-33-1"></div>' . $C15;
+			$text .= '
+				<div id="adfox_152829446223292721-1"></div>
+				<script>
+					window.Ya.adfoxCode.create({
+						ownerId: 272568,
+						containerId: \'adfox_152829446223292721-1\',
+						params: {
+							pp: \'g\',
+							ps: \'cukh\',
+							p2: \'fxrc\'
+						}
+					});
+				</script>' . $C15;
 		}
 
 		if ($position === 24)
 		{
-			$text .= '<div class="Banner" id="Banner-34-1"></div>' . $C15;
+			//$text .= '<div class="Banner" id="Banner-34-1"></div>' . $C15;
+			$text .= '
+				<div id="adfox_152829446223292721-2"></div>
+				<script>
+					window.Ya.adfoxCode.create({
+						ownerId: 272568,
+						containerId: \'adfox_152829446223292721-2\',
+						params: {
+							pp: \'g\',
+							ps: \'cukh\',
+							p2: \'fxrc\'
+						}
+					});
+				</script>' . $C15;
 		}
 
 		if ($position === 34)
 		{
-			$text .= '<div class="Banner" id="Banner-33-1"></div>' . $C15;
+			//$text .= '<div class="Banner" id="Banner-33-1"></div>' . $C15;
 		}
 
 		if ($position === 44)
 		{
-			$text .= '<div class="Banner" id="Banner-34-1"></div>' . $C15;
+			//$text .= '<div class="Banner" id="Banner-34-1"></div>' . $C15;
 		}
 
 		if($data["total"]>($i+1)){

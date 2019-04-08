@@ -1,0 +1,16 @@
+﻿<!--AdFox START-->
+<!--ng72-->
+<!--Площадка: ng72.ru / * / *-->
+<!--Тип баннера: 990*60-->
+<!--Расположение: <низ страницы>-->
+<div id="adfox_154583476227639160"></div>
+<script>
+    window.Ya.adfoxCode.create({
+        ownerId: 272568,
+        containerId: 'adfox_154583476227639160',
+        params: {
+            pp: 'i',
+            ps: 'cukh',
+            p2: 'gfha'
+        }
+    });
